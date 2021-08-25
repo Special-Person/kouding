@@ -58,6 +58,7 @@ export default {
     },
     methods: {
         onSearch(val) {
+            clearTimeout(this.timer);
             // 跳转到产品列表页
             if (val) {
                 this.$router.push({
