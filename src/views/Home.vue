@@ -6,7 +6,7 @@
         <!-- 轮播图  -->
         <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
             <van-swipe-item v-for="item in banner" :key="item.id" @click="showToast">
-                <img :src="item['image_url']" :alt="item.content" :title="item.content" src="" />
+                <img :src="item['image_url']" :alt="item.content" :title="item.content" />
             </van-swipe-item>
         </van-swipe>
 
