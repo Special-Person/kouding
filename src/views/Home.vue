@@ -1,18 +1,39 @@
 <template>
     <div class="home">
         <!-- 搜索框点击跳转 -->
-        <van-search v-model="searchVal" shape="round" background="#fff" disabled placeholder="请输入搜索关键词" @click="toPopup" />
+        <van-search
+            v-model="searchVal"
+            shape="round"
+            background="#fff"
+            disabled
+            placeholder="请输入搜索关键词"
+            @click="toPopup"
+        />
 
         <!-- 轮播图  -->
         <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-            <van-swipe-item v-for="item in banner" :key="item.id" @click="showToast">
-                <img :src="item['image_url']" :alt="item.content" :title="item.content" />
+            <van-swipe-item
+                v-for="item in banner"
+                :key="item.id"
+                @click="showToast"
+            >
+                <img
+                    :src="item['image_url']"
+                    :alt="item.content"
+                    :title="item.content"
+                />
             </van-swipe-item>
         </van-swipe>
 
         <!--  -->
         <van-grid :column-num="5" square>
-            <van-grid-item v-for="item in channel" :key="item.id" :icon="item['icon_url']" :text="item.name" @click="toChannel(item)" />
+            <van-grid-item
+                v-for="item in channel"
+                :key="item.id"
+                :icon="item['icon_url']"
+                :text="item.name"
+                @click="toChannel(item)"
+            />
         </van-grid>
 
         <!--  -->
@@ -36,7 +57,15 @@
         <!-- 人气推荐 -->
         <div class="hot-product">
             <h4>人气推荐</h4>
-            <van-card v-for="item in hotGoodsList" :key="item.id" :price="item.retail_price.toFixed(2) + '元'" :desc="item.goods_brief" :title="item.name" :thumb="item.list_pic_url" @click="toProductDetail(item)" />
+            <van-card
+                v-for="item in hotGoodsList"
+                :key="item.id"
+                :price="item.retail_price.toFixed(2) + '元'"
+                :desc="item.goods_brief"
+                :title="item.name"
+                :thumb="item.list_pic_url"
+                @click="toProductDetail(item)"
+            />
         </div>
 
         <!-- 人气推荐 -->
@@ -58,15 +87,17 @@
         </div>
 
         <!-- 新品发布 -->
-        <div class="related-product" v-for="item in categoryList" :key="item.id">
+        <div
+            class="related-product"
+            v-for="item in categoryList"
+            :key="item.id"
+        >
             <h4>{{ item.name }}</h4>
             <ProductItem :goodsList="item.goodsList" />
         </div>
 
         <!-- popup -->
-        <transition name="van-slide-right">
-            <router-view />
-        </transition>
+        <router-view />
     </div>
 </template>
 
@@ -88,12 +119,21 @@ export default {
             goodsList: [], // 新品发布
             hotGoodsList: [], // 人气推荐
             topicList: [], // 专题精选
-            categoryList: [] // 相关产品
+            categoryList: [], // 相关产品
+            direction: "slide-left"
         };
     },
     async created() {
         let res = await getHomeData();
-        const { banner, channel, brandList, newGoodsList, hotGoodsList, topicList, categoryList } = res.data;
+        const {
+            banner,
+            channel,
+            brandList,
+            newGoodsList,
+            hotGoodsList,
+            topicList,
+            categoryList
+        } = res.data;
 
         this.banner = banner;
         this.channel = channel;
@@ -248,5 +288,26 @@ export default {
             margin-right: 15px;
         }
     }
+}
+
+.slide-left-enter-active,
+.slide-left-leave-active {
+    transition: transform 0.3s ease-out;
+}
+.slide-left-enter {
+    transform: translate(100%, 0);
+}
+.slide-left-leave-to {
+    transform: translate(-100%, 0);
+}
+.slide-right-enter-active,
+.slide-right-leave-active {
+    transition: transform 0.3s ease-in;
+}
+.slide-right-enter {
+    transform: translate(-100%, 0);
+}
+.slide-right-leave-to {
+    transform: translate(100%, 0);
 }
 </style>

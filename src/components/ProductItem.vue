@@ -1,6 +1,11 @@
 <template>
     <ul class="product">
-        <li class="product-item" @click="gotoDetail(item)" v-for="item in goodsList" :key="item.id">
+        <li
+            class="product-item"
+            @click="gotoDetail(item)"
+            v-for="item in goodsList"
+            :key="item.id"
+        >
             <div class="img">
                 <img v-lazy="item['list_pic_url']" alt="" />
             </div>
@@ -18,6 +23,9 @@ export default {
     },
     data() {
         return {};
+    },
+    created(){
+        console.log(this.goodsList);
     },
     methods: {
         gotoDetail(product) {

@@ -1,6 +1,5 @@
 import App from './App.vue'
 import router from './router'
-import "./assets/reset.css"
 import "@/vantui"
 
 Vue.config.productionTip = false

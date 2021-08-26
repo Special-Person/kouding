@@ -1,7 +1,7 @@
 <template>
     <div id="app">
-        <keep-alive>
-            <router-view :key="$route.fullPath" />
+        <keep-alive exclude="ProductItem,Product,ProductDetail,Popup">
+            <router-view/>
         </keep-alive>
         <MyTabbar v-if="$route.meta['showTabbar']" />
     </div>

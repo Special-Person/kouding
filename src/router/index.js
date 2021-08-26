@@ -60,13 +60,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "Topic"*/"../views/Topic.vue")
   },
   {
-    // 空白页 用于刷新路由
-    path: "/empty",
-    name: "Empty",
-    meta: { showTabbar: true },
-    component: () => import(/* webpackChunkName: "Empty"*/"../views/Empty.vue")
-  },
-  {
     // 产品页
     path: "/product",
     name: "Product",
@@ -79,7 +72,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "ProductDetail"*/"../views/ProductDetail.vue")
   },
   {
-    // 产品详情页
+    // 首页nav产品详情页
     path: "/channel",
     name: "Channel",
     component: () => import(/* webpackChunkName: "Channel"*/"../views/Channel.vue")
@@ -109,7 +102,6 @@ router.beforeEach((to, from, next) => {
 
     return;
   } else {
-
     next();
   }
 });

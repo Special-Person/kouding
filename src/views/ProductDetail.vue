@@ -46,18 +46,30 @@
             <ProductItem :goodsList="goodsList" />
         </div>
 
-        <van-sku v-model="show" ref="sku" :sku="sku" :goods="goods" :hide-stock="sku.hide_stock" />
+        <van-sku
+            v-model="show"
+            ref="sku"
+            :sku="sku"
+            :goods="goods"
+            :hide-stock="sku.hide_stock"
+        />
 
         <MyGoodsAction :badge="badge" @addToCart="addToCart" />
     </div>
 </template>
 
 <script>
-import { queryProduct, addCart, queryRelatedProduct, getCartCount } from "../api";
+import {
+    queryProduct,
+    addCart,
+    queryRelatedProduct,
+    getCartCount
+} from "../api";
 import Tips from "../components/Tips";
 import ProductItem from "../components/ProductItem";
 import MyGoodsAction from "../components/MyGoodsAction";
 export default {
+    name: "ProductDetail",
     components: {
         Tips,
         ProductItem,
@@ -85,44 +97,15 @@ export default {
             badge: 0
         };
     },
-    async created() {
-        let token = localStorage.getItem("token");
-
-        let {
-            data: { gallery, info, attribute, issue, productList }
-        } = await queryProduct({
-            id: this.$route.query.id
-        });
-
-        if (gallery.length === 0) {
-            this.gallery = [
-                {
-                    img_url: info.list_pic_url
-                }
-            ];
-        } else {
-            this.gallery = gallery;
-        }
-
-        this.info = info;
-        this.attribute = attribute;
-        this.issue = issue;
-        this.productList = productList;
-
-        this.goods.picture = info["list_pic_url"];
-        this.sku.price = Number(info["retail_price"]).toFixed(2);
-        this.sku.stock_num = info["goods_number"];
-
-        queryRelatedProduct({
-            id: this.$route.query.id
-        }).then(res => {
-            this.goodsList = res.data.goodsList;
-        });
-
-        if (token) {
-            getCartCount().then(res => {
-                this.badge = res.data.cartTotal.goodsCount;
-            });
+    created() {
+        this.getData();
+    },
+    watch: {
+        $route: function(from, to) {
+            if (from.fullPath !== to.fullPath) {
+                window.scroll({ top: 0 });
+                this.getData();
+            }
         }
     },
     methods: {
@@ -149,6 +132,44 @@ export default {
             } else {
                 this.show = true;
             }
+        },
+        async getData() {
+            // 弹出加载loading
+            let token = localStorage.getItem("token");
+
+            let {
+                data: { gallery, info, attribute, issue, productList }
+            } = await queryProduct({
+                id: this.$route.query.id
+            });
+
+            if (gallery.length === 0) {
+                this.gallery = [{ img_url: info.list_pic_url }];
+            } else {
+                this.gallery = gallery;
+            }
+
+            this.info = info;
+            this.attribute = attribute;
+            this.issue = issue;
+            this.productList = productList;
+
+            this.goods.picture = info["list_pic_url"];
+            this.sku.price = Number(info["retail_price"]).toFixed(2);
+            this.sku.stock_num = info["goods_number"];
+
+            queryRelatedProduct({
+                id: this.$route.query.id
+            }).then(({ data }) => {
+                this.goodsList = data.goodsList;
+            });
+
+            if (token) {
+                getCartCount().then(({ data: { cartTotal } }) => {
+                    this.badge = cartTotal.goodsCount;
+                });
+            }
+            // 关闭加载loading
         }
     }
 };

@@ -21,8 +21,6 @@
                 isCollect: false
             };
         },
-        created() {
-        },
         methods: {
             addCart() {
                 this.$emit("addToCart");

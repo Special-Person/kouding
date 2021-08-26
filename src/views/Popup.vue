@@ -26,6 +26,7 @@ import HomePopupHistoryHot from "@/components/HomePopupHistoryHot";
 import SearchList from "@/components/SearchList";
 
 export default {
+    name: "Popup",
     components: {
         HomePopupHistoryHot,
         SearchList
